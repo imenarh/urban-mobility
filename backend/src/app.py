@@ -78,10 +78,11 @@ def get_stats():
     summary = dict(cursor.fetchone())
     # Trips count 
     cursor.execute("""
-        SELECT PUBorough AS borough, COUNT(*) AS trip_count
-        FROM trips
-        WHERE PUBorough IS NOT NULL
-        GROUP BY PUBorough
+        SELECT z.Borough AS borough, COUNT(*) AS trip_count
+        FROM trips t
+        JOIN zones z ON t.PULocationID = z.LocationID
+        WHERE z.Borough IS NOT NULL
+        GROUP BY z.Borough
         ORDER BY trip_count DESC;
     """)
     
