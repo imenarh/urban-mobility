@@ -1,4 +1,4 @@
+venv/
+.venv/
 backend/data/
-backend/venv/
 __pycache__/
-*.Zone.Identifier
