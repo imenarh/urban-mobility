@@ -26,38 +26,84 @@ def health_check():
 
 @app.route("/api/trips", methods=["GET"])
 def get_trips():
-    """ Retrieves paginated trips with optional filters for borough and rush hour."""
-   # Get the filters from the URL
-    limit = request.args.get("limit", 100, type=int)
-    offset = request.args.get("offset", 0, type=int)
-    borough = request.args.get("borough", None, type=str)
-    is_rush_hour = request.args.get("is_rush_hour", type=int)
+   """Trips with filters for date, fare, distanceand location."""
+   limit = min(request.args.get("limit",100, type=int), 1000)
+   offset = request.args.get("offset", 0, type=int)
+   borough = request.args.get("borough", type=str)
+   location_id = request.args.get("location_id", type=int)
+   is_rush_hour = request.args.get("is_rush_hour", type=int)
+   start_date = request.args.get("start_date", type=str)
+   end_date = request.args.get("end_date", type=str)
+   min_fare = request.args.get("min_fare", type=float)
+   max_fare = request.args.get("max_fare", type=float)
+   min_distance = request.args.get("min_distance", type=float)
+   max_distance = request.args.get("max_distance", type=float)
+   sort_by =request.args.get("sort_by", "tpep_pickup_datetime")
+   order = request.args.get("order", "desc")
 
-    conn = get_db_connection()
-    cursor = conn.cursor()
-#where 1=1 so i can add AND conditions after it
-    query = "SELECT * FROM trips WHERE 1=1"
-   # Values that go in the ? spots in the query, to prevent SQL injection
-    params = []
-# Match the borough on either pickup or dropoff
-    if borough:
-        query += " AND (PUBorough =? OR DUBorough =?)"
-        params.extend([borough, borough])
-#Check for None because 0 (non-rush hour) is a valid value
-    if is_rush_hour is not None:
-        query += " AND is_rush_hour =?"
-        params.append(is_rush_hour)
-#Newest trips first, then apply pagination
-    query += " ORDER BY tpep_pickup_datetime DESC LIMIT ? OFFSET ?"
-    params.extend([limit, offset])
+   #only allow real column names, so nobody can injectSQL throughsort_by
+   allowed_sorts = ["tpep_pickup_datetime", "total_amount",
+                  "trip_distance", "trip_duration_mins"]
+   if sort_by not in allowed_sorts:
+      sort_by = "tpep_pickup_datetime"
+      order = "ASC" if order.lower() in ("asc",) else "DESC"
 
-    cursor.execute(query, params)
-    #jsonify cant read sqlite3.Row, so make dicts
-    trips = [dict(row) for row in cursor.fetchall()]
-    cursor.close()
-    conn.close()
-    return jsonify(trips)
+   query = """
+      SELECT t.*, pz.Borough AS PUBorough, pz.Zone AS PUZone,
+      dz.Borough AS DOBorough,dz.Zone AS DOZone
+      FROM trips t
+      JOIN zones pz ON t.PULocationID = pz.LocationID
+      JOIN zones dz ON t.DOLocationID = dz.LocationID
+      WHERE 1=1
+      """
+   params = []
 
+   if borough:
+      query += "AND (pz.Borough = ? OR dz.Borough = ?)"
+      params.extend([borough, borough])
+
+   if location_id is not None:
+      query += "AND (t.PULocationID = ? OR t.DOLocationID = ?)"
+      params.extend([location_id, location_id])
+
+   if is_rush_hour is not None:
+      query += " AND t.is_rush_hour = ?"
+      params.append(is_rush_hour)
+
+   if start_date:
+      query += " AND NOT (t.tpep_pickup_datetime < ?)"
+      params.append(start_date)
+
+   if end_date:
+      query += "AND NOT (t.tpep_pickup_datetime > ?)"
+      params.append(end_date + " 23:59:59")
+
+   if min_fare is not None:
+      query += " AND NOT (t.total_amount < ?)"
+      params.append(min_fare)
+
+   if max_fare is not None:
+      query += "And NOT (t.total_amount > ?)"
+      params.append(max_fare)
+
+   if min_distance is not None:
+      query += "AND NOT (t.trip_distance < ?)"
+      params.append(min_distance)
+
+   if max_distance is not None:
+      query += "AND NOT (t.trip_distance > ?)"
+      params.append(max_distance)
+
+   query += f" ORDER BY t.{sort_by} {order} LIMIT ? OFFSET ?"
+   params.extend([limit, offset])
+
+   conn = get_db_connection()
+   cursor = conn.cursor()
+   cursor.execute(query, params)
+   trips = [dict(row) for row in cursor.fetchall()]
+   cursor.close()
+   conn.close()
+   return jsonify(trips)
 
 @app.route("/api/stats", methods=["GET"])
 def get_stats():
