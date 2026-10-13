@@ -1,13 +1,12 @@
 <!DOCTYPE html>
 <!-- 
 Urban Mobility Data Explorer
-This is a web application that allows users to explore the urban mobility data explorer.
-This html file only defines the structure of the page. Below are the other files that will be used for the application:
-1. style.css - visual styles
-2. api.js - connects the backend to the frontend
-3. charts.js - draws the charts and map
-4. app.js - wires all of the above together
+A dashboard for exploring NYC taxi trip patterns.
+This html file only defines the structure of the page. Other files used:
+1. css/style.css - visual styles
+2. js/script.js - all the JavaScript (data loading, filters, table, charts, map)
 -->
+
 <html lang ="en">
 <head>
     <meta charset="UTF-8">
@@ -45,14 +44,11 @@ This html file only defines the structure of the page. Below are the other files
     <!-- Two-column layout: filters on the left, content on the right -->
     <div class="layout">
      
-    <!-- FILTERS SIDEBAR -->
-    <!-- Every input has a name matching the API's query parameter,
-        so app.js can turn the form straight into a request URL.-->
     <aside class="filters" aria-label="Filters">
         <form id="filter-form" autocomplete="off">
             <h2>Filter trips</h2>
                                              
-            <!-- Time filters: date range and pickup hour range -->
+            <!-- Time filter to find date range and pickup hour range -->
             <fieldset>
             <legend>Time</legend>
             <label for="date-from">From date</label>
@@ -66,7 +62,7 @@ This html file only defines the structure of the page. Below are the other files
             </div>
         </fieldset> 
 
-        <!-- Location filters: options are filled in by JS from the zone lookup data -->
+        <!-- Location filters to select options filled in by JS from the zone lookup data -->
         <fieldset>
             <legend>Location</legend>
             <label for="borough">Pickup borough</label>
@@ -79,7 +75,7 @@ This html file only defines the structure of the page. Below are the other files
             </select>
         </fieldset>
                                                  
-        <!-- Numeric range filters: trip distance and fare amount -->
+        <!-- This part is for the trip distance and fare amount both are numerical -->
         <fieldset>
             <legend>Distance and fare</legend>
             <label for="dist-min">Distance (miles)</label>
@@ -94,10 +90,10 @@ This html file only defines the structure of the page. Below are the other files
         </div>
     </fieldset>
                          
-    <!-- Hidden until JS finds invalid input (e.g. min greater than max) -->
+    <!-- only appears when JS finds invalid input (e.g. min greater than max) -->
     <p id="filter-error" class="form-error" role="alert" hidden></p>
                                      
-    <!-- Apply sends the request; Clear (type="reset") empties every field -->
+    <!-- completes the request; Clear (type="reset") empties every field -->
             <div class="actions">
                 <button type="submit" class="btn-primary">Apply filters</button>
                 <button type="reset" id="reset-btn" class="btn-secondary">Clear</button>
@@ -105,12 +101,12 @@ This html file only defines the structure of the page. Below are the other files
         </form>
     </aside>
                                          
-    <!-- ================= MAIN CONTENT ================= -->
+    <!-- Main table-->
     <main>
                                                      
-        <!-- ---------- Summary cards ----------
+        <!--Summary 
             Headline numbers for whatever trips match the current filters.
-            The "–" is a placeholder until the API responds. -->
+            The "–" shows up until the API responds. -->
         <section aria-labelledby="summary-title">
             <!-- Heading kept for screen readers only (visually-hidden class in the CSS) -->
             <h2 id="summary-title" class="visually-hidden">Summary of matching trips</h2> 
@@ -170,7 +166,7 @@ This html file only defines the structure of the page. Below are the other files
             </figure>
         </section>
                                                                                                                                                                                                                                                                  
-        <!-- ---------- Map ----------
+        <!-- Map 
             Leaflet draws the taxi zone polygons (from the GeoJSON file) in
             this empty div and shades them by pickup count. -->
         <section class="map-section" aria-labelledby="map-title">
@@ -257,10 +253,8 @@ This html file only defines the structure of the page. Below are the other files
         Placed at the end so the HTML exists before the JS runs.
         Order matters: libraries first, then our files, with app.js last
         because it uses the functions defined in api.js and charts.js. -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>                  <!-- maps -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script> <!-- charts -->
-    <script src="js/api.js"></script>     <!-- fetches data from the backend -->
-    <script src="js/charts.js"></script>  <!-- draws charts and MAP -->
-    <script src="js/app.js"></script>     <!-- connects everything -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src=""https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src=""js/script.js"></script>
 </body>
 </html>

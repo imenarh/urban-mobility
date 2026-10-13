@@ -1,0 +1,159 @@
+/* ===== Urban Mobility Data Explorer - styles ===== */
+
+/* Colours and fonts: change them here to restyle the whole site */
+:root {
+    --bg: #eef1f4;
+    --surface: #fff;
+    --ink: #14213d;
+    --soft: #5a6478;
+    --line: #d9dee6;
+    --teal: #0f8b8d;
+    --amber: #f2a900;
+    --danger: #b3261e;
+}
+
+/* Reset: same starting point in every browser */
+* { box-sizing: border-box; margin: 0; }
+
+body {
+    font-family: "Public Sans", system-ui, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    line-height: 1.5;
+}
+
+h1, h2, h3 { font-family: "Archivo", sans-serif; }
+h2 { margin-bottom: 0.75rem; }
+canvas { max-width: 100%; }
+.caption { color: var(--soft); font-size: 0.875rem; }
+:focus-visible { outline: 3px solid var(--amber); outline-offset: 2px; }
+
+/* Hidden on screen but still read by screen readers */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+}
+
+/* Skip link: appears only when a keyboard user tabs to it */
+.skip-link { position: absolute; top: -4rem; left: 1rem; padding: 0.5rem 1rem; background: var(--ink); color: #fff; }
+.skip-link:focus { top: 1rem; }
+
+/* Header: title left, status pill right */
+.site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1.5rem 2rem;
+    background: var(--ink);
+    color: #fff;
+    border-bottom: 4px solid var(--amber);
+}
+.tagline { color: #c9d1e0; }
+.data-status { padding: 0.4rem 0.9rem; border-radius: 999px; background: rgba(255, 255, 255, 0.15); font-size: 0.875rem; }
+
+/* Two columns: filters (fixed) and content (rest) */
+.layout {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: 1.25rem;
+    padding: 1.25rem 2rem 2rem;
+}
+main { display: flex; flex-direction: column; gap: 2rem; min-width: 0; }
+
+/* ===== Filters sidebar ===== */
+.filters { padding: 1.25rem; background: var(--surface); border-radius: 8px; }
+fieldset { border: 0; padding: 0; margin-bottom: 1rem; }
+legend { font-weight: 600; margin-bottom: 0.5rem; }
+label { display: block; margin-top: 0.5rem; font-size: 0.875rem; color: var(--soft); }
+input, select { width: 100%; padding: 0.45rem; border: 1px solid var(--line); border-radius: 6px; font: inherit; }
+.row { display: flex; gap: 0.5rem; }
+.form-error { color: var(--danger); font-size: 0.875rem; }
+
+/* ===== Buttons ===== */
+.actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+button { padding: 0.5rem 1rem; border-radius: 6px; font: inherit; font-weight: 600; cursor: pointer; }
+.btn-primary { background: var(--teal); color: #fff; border: 0; }
+.btn-secondary { background: var(--surface); color: var(--ink); border: 1px solid var(--line); }
+
+/* ===== Summary cards: as many per row as fit ===== */
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; }
+.stat { display: flex; flex-direction: column; padding: 1rem; background: var(--surface); border-radius: 8px; border-top: 3px solid var(--teal); }
+.stat-label { font-size: 0.875rem; color: var(--soft); }
+.stat-value { font-family: "Archivo", sans-serif; font-size: 1.5rem; font-weight: 800; }
+
+/* ===== Charts: two per row, the wide one takes the full row ===== */
+.charts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+.charts h2, .chart-card.wide { grid-column: 1 / -1; }
+.chart-card { padding: 1rem; background: var(--surface); border-radius: 8px; }
+.ranking { padding-left: 1.25rem; margin-top: 0.5rem; }
+
+/* ===== Map ===== */
+.zone-map { height: 420px; margin-top: 0.5rem; border: 1px solid var(--line); border-radius: 8px; }
+
+/* ===== Trips table ===== */
+.table-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+.sort-controls { display: flex; align-items: center; gap: 0.5rem; }
+.sort-controls label { margin: 0; }
+.sort-controls select { width: auto; }
+.table-wrap { overflow-x: auto; background: var(--surface); border-radius: 8px; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 0.65rem 0.9rem; text-align: left; border-bottom: 1px solid var(--line); }
+th { background: var(--ink); color: #fff; }
+th[data-sort] { cursor: pointer; }
+.num { text-align: right; }
+.empty { text-align: center; color: var(--soft); }
+.pagination { display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 1rem; }
+
+/* ===== Trip detail popup ===== */
+dialog { width: min(500px, 90vw); padding: 1.25rem; border: 0; border-radius: 8px; }
+dialog::backdrop { background: rgba(20, 33, 61, 0.5); }
+.dialog-head { display: flex; justify-content: space-between; align-items: center; }
+.detail-list { display: grid; grid-template-columns: auto 1fr; gap: 0.4rem 1rem; margin-top: 1rem; }
+.detail-list dt { color: var(--soft); }
+.detail-list dd { font-weight: 600; }
+
+/* ===== Footer ===== */
+.site-footer { padding: 1.5rem 2rem; text-align: center; color: var(--soft); font-size: 0.875rem; }
+
+/* ===== Small screens: stack everything into one column ===== */
+@media (max-width: 800px) {
+      .layout, .charts { grid-template-columns: 1fr; padding-left: 1rem; padding-right: 1rem; }
+}
+
+/* ===== Map ===== */
+.zone-map { height: 420px; margin-top: 0.5rem; border: 1px solid var(--line); border-radius: 8px; }
+
+/* ===== Trips table ===== */
+.table-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
+.sort-controls { display: flex; align-items: center; gap: 0.5rem; }
+.sort-controls label { margin: 0; }
+.sort-controls select { width: auto; }
+.table-wrap { overflow-x: auto; background: var(--surface); border-radius: 8px; }
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 0.65rem 0.9rem; text-align: left; border-bottom: 1px solid var(--line); }
+th { background: var(--ink); color: #fff; }
+th[data-sort] { cursor: pointer; }
+.num { text-align: right; }
+.empty { text-align: center; color: var(--soft); }
+.pagination { display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 1rem; }
+
+/* ===== Trip detail popup ===== */
+dialog { width: min(500px, 90vw); padding: 1.25rem; border: 0; border-radius: 8px; }
+dialog::backdrop { background: rgba(20, 33, 61, 0.5); }
+.dialog-head { display: flex; justify-content: space-between; align-items: center; }
+.detail-list { display: grid; grid-template-columns: auto 1fr; gap: 0.4rem 1rem; margin-top: 1rem; }
+.detail-list dt { color: var(--soft); }
+.detail-list dd { font-weight: 600; }
+
+/* ===== Footer ===== */
+.site-footer { padding: 1.5rem 2rem; text-align: center; color: var(--soft); font-size: 0.875rem; }
+
+/* ===== Small screens: stack everything into one column ===== */
+@media (max-width: 800px) {
+      .layout, .charts { grid-template-columns: 1fr; padding-left: 1rem; padding-right: 1rem; }
+}
