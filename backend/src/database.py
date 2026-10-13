@@ -6,7 +6,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 DB_PATH = os.path.join(BASE_DIR, "../data/processed/urban_mobility.db")
 CSV_PATH = os.path.join(BASE_DIR, "../data/processed/cleaned_trips.csv")
 ZONES_PATH = os.path.join(BASE_DIR, "../data/raw/taxi_zone_lookup.csv")
-SCHEMA_PATH = os.path.join(BASE_DIR, "schema.sql")
+SCHEMA_PATH = os.path.join(BASE_DIR, "../sql/schema.sql")
 
 #these now live in the zones table
 ZONE_COLUMNS = ["PUBorough","PUZone","PUServiceZone",
