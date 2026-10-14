@@ -66,6 +66,6 @@ python3 -m http.server 8000 --directory frontend
 
 - 5 minute walkthrough video: [video link](https://jam.dev/v/26f9424d-d168-4d1e-ad7a-d2d161f06f75)
 - Team Participation Sheet: [link](https://docs.google.com/spreadsheets/d/1MKmqO5X7MDIaNBVUdVTbXLzOmWTAkmv_ImL6zK8pVW0/edit?gid=0#gid=0)
-- Technical report PDF: 
+- Technical report PDF: https://github.com/imenarh/urban-mobility/blob/main/documentation/technical_report.md
 - Database Schema: [`backend/sql/schema.sql`](./backend/sql/schema.sql)
 - CodeVibe Reports: [`codevibe-reports/`](./codevibe-reports/)
