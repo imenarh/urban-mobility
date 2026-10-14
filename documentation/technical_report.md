@@ -9,9 +9,9 @@
 * **Assumptions** Data integrity was ensured by quarantining and removing records that had a timestamp during the cleaning process that was earlier than the pickup timestamp, and those with a trip time of zero or a negative fare. The null congestion surcharges were imputed as 0.0 as they were pre-mandatory implementation records.
 
 * We created three strong metrics to feature:
-**1.The average speed** in miles per hour, computed from distance and trip duration (in minutes) to determine traffic congestion bottlenecks.
-**2.fare_per_mile:** Total amount over trip distance, used to determine trip unit-economics
-**3.is_rush_hour:** A binary variable indicating the rush hours of a weekday (between 7-10 AM and 4-7 PM).
+1. **The average speed** in miles per hour, computed from distance and trip duration (in minutes) to determine traffic congestion bottlenecks.
+2. **fare_per_mile:** Total amount over trip distance, used to determine trip unit-economics.
+3. **is_rush_hour:** A binary variable indicating the rush hours of a weekday (between 7-10 AM and 4-7 PM).
 
 
 
