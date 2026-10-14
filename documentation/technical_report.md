@@ -52,7 +52,11 @@ If given more time, several areas could be improved or addressed:
 
 
 
+<<<<<<< HEAD
 ## Frontend development (Yai Majak D'Agoot)
+=======
+## Frontend development(Yai Majak D'Agoot)
+>>>>>>> b79de95 (Update technical report with frontend and backend details)
 
 ### 1. Overview
 The frontend is a single page dashboard created with HTML, CSS and JavaScript and using Chart.js for the charts. It provides a user with the ability to filter NYC taxi trips and display the results in summary cards, charts and a table, based on data from Member 2's Flask API.
@@ -81,6 +85,7 @@ There was syntax checking of script.js and the entire dashboard was executed on 
 * The scatter plot is not representative of a random sample of the first 300 matching trips.
 * There's no map or hourly chart, as there are no endpoints in the backend for them.
 * With additional time: filter support in /api/stats, hourly and zone endpoints, GeoJSON borough heat map, a total count to aid in pagination.
+<<<<<<< HEAD
 
 
 ## Algorithms, Integration & Testing (Imena Rwigema Herve)
@@ -113,3 +118,5 @@ Cache the counts to avoid counting millions of rows for each load.
 Top 5" refers to the 5 greatest numbers.
 The k is the number of results to return, not the maximum value.
 
+=======
+>>>>>>> b79de95 (Update technical report with frontend and backend details)

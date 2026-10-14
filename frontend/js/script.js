@@ -199,6 +199,34 @@ function showTable(trips) {
   }
 }
 
+
+async function showRanking() {
+    const list = $("ranking-list");
+
+    try {
+        const rankings = await getJSON("/ranking");
+
+        list.innerHTML = "";
+
+        for (const location of rankings) {
+            const item = document.createElement("li");
+
+            item.textContent =
+                `${location.zone ?? "Unknown zone"} (${Number(location.trip_count).toLocaleString()} trips)`;
+
+            list.appendChild(item);
+        }
+
+        if (rankings.length === 0) {
+            list.innerHTML = "<li>No ranking data available</li>";
+        }
+    } catch (error) {
+        list.innerHTML = "<li>Could not load rankings</li>";
+        console.error(error);
+    }
+}
+
+
 // "Page 1" and the Previous / Next buttons
 function showPagination(hasNext) {
   $("page-info").textContent = `Page ${state.page}`;
@@ -249,7 +277,7 @@ function showBoroughChart(boroughs) {
       labels: boroughs.map((b) => b.borough),
       datasets: [{
         data: boroughs.map((b) => b.trip_count),
-        backgroundColor: [TEAL, "#14213d", YELLOW, "#5a6478", "#9bb8c9", "#c9d1e0"]
+        backgroundColor: [TEAL, "#14213d", YELLOW, "#5a6478", "#9bb8c9", "#c9d1e0", "#7C5CBF"]
       }]
     },
     options: { plugins: { legend: { position: "bottom" } } }
@@ -289,6 +317,7 @@ async function refreshDashboard() {
     showTable(tripData.trips);
     showPagination(tripData.hasNext);
     showScatterChart(sample);
+    showRanking()
     $("data-status").textContent =
       `Connected: ${Number(stats.summary.total_trips).toLocaleString()} trips in the dataset`;
   } catch (error) {

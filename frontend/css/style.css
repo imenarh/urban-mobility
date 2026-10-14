@@ -65,6 +65,10 @@ button { padding: 0.5rem 1rem; border-radius: 6px; font: inherit; font-weight: 6
 .charts h2 { grid-column: 1 / -1; }
 .chart-card { padding: 1rem; background: var(--white); border-radius: 8px; }
 
+.ranking {
+  margin-top: 1.5rem;
+}
+
 /* TRIPS TABLE */
 .table-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
 .sort-controls { display: flex; align-items: center; gap: 0.5rem; }

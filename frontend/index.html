@@ -87,17 +87,17 @@ This html file only defines the structure of the page. Other files used:
                 <button type="reset" id="reset-btn" class="btn-secondary">Clear</button>
             </div>
         </form>
+        <section class="ranking" aria-labelledby="ranking-title">
+            <h2 id="ranking-title">Top 5 drop-off Zones</h2>
+            <ol id="ranking-list">
+                <li>Loading rankings....</li>
+            </ol>
+        </section>
     </aside>
                                          
     <!-- Main table-->
     <main>
-                                                     
-        <!--Summary 
-            Overall numbers for the whole dataset. They do not change with the filters.
-            The "–" shows up until the API responds. -->
         <section aria-labelledby="summary-title">
-            <!-- Heading kept for screen readers only (visually-hidden class in the CSS) -->
-            <h2 id="summary-title" class="visually-hidden">Overall statistics</h2>
             <p class="caption">Overall statistics for the whole dataset. They do not change with the filters.</p> 
             <div class="summary-grid" id="summary-cards">
                 <article class="stat"><span class="stat-label">Trips</span><span class="stat-value" id="stat-trips">–</span></article>
@@ -108,11 +108,7 @@ This html file only defines the structure of the page. Other files used:
                 <article class="stat"><span class="stat-label">Average speed</span><span class="stat-value" id="stat-speed">–</span></article>
             </div>
         </section>
-                                                                                                 
-        <!-- Charts:
-            Each chart is a <figure> with a title and a one-line explanation of
-            what it shows. The <canvas> elements are where Chart.js draws.
-            The aria-label gives screen readers a text description. -->
+                                                                                  
         <section class="charts" aria-labelledby="charts-title">
             <h2 id="charts-title">Patterns</h2>
                                                                                                                                                      
@@ -125,7 +121,7 @@ This html file only defines the structure of the page. Other files used:
                 <canvas id="chart-borough" role="img" aria-label="Trips by pickup borough"></canvas>
             </figure>
                                                                                                                                                                                                      
-            <!-- Relationship between distance and fare; a sample keeps it fast -->
+            <!-- Relationship between distance and fare-->
             <figure class="chart-card">
                 <figcaption>
                     <h3>Fare against distance</h3>
@@ -135,13 +131,11 @@ This html file only defines the structure of the page. Other files used:
             </figure>
         </section>
                                                                                                                                                                                                                                                                                                  
-        <!--  Trips table 
-            The detailed records. id="trips-section" is the target of the skip link. -->
+        <!--  Trips table -->
         <section id="trips-section" aria-labelledby="trips-title">
             <div class="table-head">
                 <h2 id="trips-title">Trips</h2>
-                                                                                                                                                                                                                                                                                                                                             
-                <!-- Dropdown sorting. The option values are the column names the API should accept for sorting (confirm with Member 2). -->
+
                 <div class="sort-controls">
                     <label for="sort-by">Sort by</label>
                     <select id="sort-by">
@@ -156,8 +150,7 @@ This html file only defines the structure of the page. Other files used:
                     </select>
                 </div>
             </div>
-                                                                                                                                                                                                                                                                                                                                                                                                 
-            <!-- table-wrap lets the table scroll sideways on small screens -->
+
             <div class="table-wrap">
                 <table id="trips-table">
                     <thead>
@@ -173,14 +166,12 @@ This html file only defines the structure of the page. Other files used:
                             <th scope="col"><span class="visually-hidden">Details</span></th>
                         </tr>
                     </thead>
-                    <!-- JS replaces this placeholder row with the real trip rows -->
                     <tbody id="trips-body">
                         <tr><td colspan="7" class="empty">Loading trips…</td></tr>
                     </tbody>
                 </table>
             </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-            <!-- Page-by-page navigation so we never load the whole dataset at once -->
+
             <nav class="pagination" aria-label="Trip pages">
                 <button type="button" id="prev-page" class="btn-secondary">Previous</button>
                 <span id="page-info">Page 1</span>
@@ -189,10 +180,7 @@ This html file only defines the structure of the page. Other files used:
         </section>
     </main>
 </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-<!--TRIP DETAIL VIEW 
-        A native <dialog> popup. JS fills the <dl> with every field of the trip that was clicked, then calls showModal(). The form with
-        method="dialog" closes it without any extra JS. -->
+
 <dialog id="trip-dialog" aria-labelledby="trip-dialog-title">
     <form method="dialog" class="dialog-head">
         <h2 id="trip-dialog-title">Trip details</h2>

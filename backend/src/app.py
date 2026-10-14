@@ -141,6 +141,45 @@ def get_stats():
         "borough_distribution": borough_stats
     })
 
+@app.route("/api/ranking", methods=["GET"])
+def get_ranking():
+   """Provide a ranking of the top what does 5 drop-off zones from trip data."""   
+   conn = get_db_connection()
+   cursor = conn.cursor()
+
+   cursor.execute("""
+      SELECT 
+         DOLocationID,
+         COUNT (*) AS trip_count
+      FROM trips
+      GROUP BY DOLocationID;
+""")
+   location_trips = []
+
+   for row in cursor.fetchall():
+      location_trips.append(dict(row))
+
+   n = len(location_trips)
+
+   for i in range(n):
+       for j in range(n - i - 1):
+            if location_trips[j]["trip_count"] < location_trips[j + 1]["trip_count"]:
+                location_trips[j], location_trips[j + 1] = location_trips[j + 1], location_trips[j]
+
+   top_five = location_trips[:5]
+
+    # Get the names of the top 5 locations
+   for location in top_five:
+        cursor.execute(
+            "SELECT Zone FROM zones WHERE LocationID = ?",
+            (location["DOLocationID"],)
+        )
+
+        zone = cursor.fetchone()
+        location["zone"] = zone["Zone"] if zone else None
+
+   conn.close()
+   return jsonify(top_five)
 
 if __name__ == "__main__":
     # debug=True auto-reloades on changes, on local use only
