@@ -1,4 +1,4 @@
-/* ===== COLOURS (change them here and the whole site changes) ===== */
+/* COLOURS (change them here and the whole site changes) */
 :root {
   --bg: #eef1f4;       /* page background */
   --white: #fff;       /* cards and boxes */
@@ -10,7 +10,7 @@
   --red: #b3261e;      /* error messages */
 }
 
-/* ===== BASICS ===== */
+/* BASICS */
 /* Remove default spacing so every browser looks the same */
 * { box-sizing: border-box; margin: 0; }
 
@@ -30,16 +30,16 @@ canvas { max-width: 100%; }
 .skip-link { position: absolute; top: -4rem; left: 1rem; padding: 0.5rem 1rem; background: var(--dark); color: #fff; }
 .skip-link:focus { top: 1rem; }
 
-/* ===== HEADER ===== */
+/*HEADER */
 .site-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; padding: 1.5rem 2rem; background: var(--dark); color: #fff; border-bottom: 4px solid var(--yellow); }
 .tagline { color: #c9d1e0; }
 .data-status { padding: 0.4rem 0.9rem; border-radius: 999px; background: rgba(255, 255, 255, 0.15); font-size: 0.875rem; }
 
-/* ===== PAGE LAYOUT: filters on the left, content on the right ===== */
+/* PAGE LAYOUT: filters on the left, content on the right */
 .layout { display: grid; grid-template-columns: 280px 1fr; gap: 1.25rem; padding: 1.25rem 2rem 2rem; }
 main { display: flex; flex-direction: column; gap: 2rem; min-width: 0; }
 
-/* ===== FILTERS ===== */
+/* FILTERS */
 .filters { padding: 1.25rem; background: var(--white); border-radius: 8px; }
 fieldset { border: 0; padding: 0; margin-bottom: 1rem; }
 legend { font-weight: 600; }
@@ -48,28 +48,28 @@ input, select { width: 100%; padding: 0.45rem; border: 1px solid var(--border); 
 .row { display: flex; gap: 0.5rem; }  /* puts Min and Max side by side */
 .form-error { color: var(--red); font-size: 0.875rem; }
 
-/* ===== BUTTONS ===== */
+/* BUTTONS */
 .actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
 button { padding: 0.5rem 1rem; border-radius: 6px; font: inherit; font-weight: 600; cursor: pointer; }
 .btn-primary { background: var(--teal); color: #fff; border: 0; }
 .btn-secondary { background: var(--white); color: var(--dark); border: 1px solid var(--border); }
 
-/* ===== SUMMARY CARDS ===== */
+/* SUMMARY CARDS */
 .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; }
 .stat { display: flex; flex-direction: column; padding: 1rem; background: var(--white); border-radius: 8px; border-top: 3px solid var(--teal); }
 .stat-label { font-size: 0.875rem; color: var(--grey); }
 .stat-value { font-family: "Archivo", sans-serif; font-size: 1.5rem; font-weight: 800; }
 
-/* ===== CHARTS: two per row, the wide one takes a full row ===== */
+/* CHARTS: two per row, the wide one takes a full row */
 .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 .charts h2, .wide { grid-column: 1 / -1; }
 .chart-card { padding: 1rem; background: var(--white); border-radius: 8px; }
 .ranking { padding-left: 1.25rem; }
 
-/* ===== MAP ===== */
+/* MAP */
 .zone-map { height: 420px; border: 1px solid var(--border); border-radius: 8px; }
 
-/* ===== TRIPS TABLE ===== */
+/* TRIPS TABLE */
 .table-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
 .sort-controls { display: flex; align-items: center; gap: 0.5rem; }
 .sort-controls label { margin: 0; }
@@ -83,7 +83,7 @@ th[data-sort] { cursor: pointer; }
 .empty { text-align: center; color: var(--grey); }
 .pagination { display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 1rem; }
 
-/* ===== TRIP DETAILS POPUP ===== */
+/* TRIP DETAILS POPUP */
 dialog { width: min(500px, 90vw); padding: 1.25rem; border: 0; border-radius: 8px; }
 dialog::backdrop { background: rgba(20, 33, 61, 0.5); }  /* dims the page behind */
 .dialog-head { display: flex; justify-content: space-between; align-items: center; }
@@ -91,10 +91,10 @@ dialog::backdrop { background: rgba(20, 33, 61, 0.5); }  /* dims the page behind
 .detail-list dt { color: var(--grey); }
 .detail-list dd { font-weight: 600; }
 
-/* ===== FOOTER ===== */
+/* FOOTER */
 .site-footer { padding: 1.5rem 2rem; text-align: center; color: var(--grey); font-size: 0.875rem; }
 
-/* ===== PHONES AND SMALL SCREENS: stack everything in one column ===== */
+/* PHONES AND SMALL SCREENS: stack everything in one column */
 @media (max-width: 800px) {
   .layout, .charts { grid-template-columns: 1fr; }
 }
