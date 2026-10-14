@@ -1,4 +1,21 @@
-## Database Design and Architecture
+## Data Processing and Cleaning (Ganza Gavin):
+
+### 1. Problem Framing and Dataset Analysis
+
+* **Data context** To map spatial zone identifiers PULocationID and DOLocationID to boroughs and service zones, we used the NYC Taxi Trip dataset which contains raw yellow cab trip data and taxi_zone_lookup.csv, which is a dimension table.
+
+* **Data Challenges & Outliers:** Physical anomalies in data identified during initial inspection: Negative fare amounts (refund adjustments or metering issues), zero/negative trip durations, distance outliers > 100 miles, missing congestion_surcharge fields in early records. In addition, there were inconsistencies in the datetime formatting in the timestamps.
+
+* **Assumptions** Data integrity was ensured by quarantining and removing records that had a timestamp during the cleaning process that was earlier than the pickup timestamp, and those with a trip time of zero or a negative fare. The null congestion surcharges were imputed as 0.0 as they were pre-mandatory implementation records.
+
+* We created three strong metrics to feature:
+**1.The average speed** in miles per hour, computed from distance and trip duration (in minutes) to determine traffic congestion bottlenecks.
+**2.fare_per_mile:** Total amount over trip distance, used to determine trip unit-economics
+**3.is_rush_hour:** A binary variable indicating the rush hours of a weekday (between 7-10 AM and 4-7 PM).
+
+
+
+## Database Design and Architecture (James D. Kanneh II) 
 
 ### 1. Schema overview
 The project uses two primary tables: 'zones' and 'trips'. Every row inside the 'zones' table defines a unique taxi zone, while each row in the 'trips' table corresponds to a single taxi ride.
