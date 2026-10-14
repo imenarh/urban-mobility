@@ -49,3 +49,35 @@ If given more time, several areas could be improved or addressed:
 * **Pagination Performance:** Using 'OFFSET' for pagination becomes slower as the table size grows.
 * **Data Quality:** Out of the nearly 200,000 trips in our sample, about 3,155 map to an "Unknown" borough, because the TLC itself assigns those trips to its "Unknown" zone IDs when the location wasn't recorded.
 * **Missing Borough Name:** 142 sample trips have a pickup zone (ID 265) with no borough name, because pandas read the TLC's "N/A" borough label as a missing value. They are counted in the total but missintg from the borough distribution. The fix is to load the zone file with 'keep_defult_na=False'
+
+
+
+## Frontend development(Yai Majak D'Agoot)
+
+### 1. Overview
+The frontend is a single page dashboard created with HTML, CSS and JavaScript and using Chart.js for the charts. It provides a user with the ability to filter NYC taxi trips and display the results in summary cards, charts and a table, based on data from Member 2's Flask API.
+
+### 2. Structure and design
+The code is in three files: index.html (structure), css/style.css (styling) and js/script.js (behaviour). For the small-dashboard, I used a single JavaScript file. It is divided into labeled sections and each function has only one function. All of the filters, sort order and page number are stored in a single state object, so that all of the parts of the page remain consistent. The colours are CSS variables and the layout changes to a single column below 800px.
+
+### 3. Features
+* **Filters:** date range, borough, distance range and fare range. They are checked first by the browser and are not allowed to be higher than the maximum (a minimum cannot be greater than the maximum) before the request is made.
+* **Summary cards:** total trips, average fare, distance, duration and speed.
+* **Graphics:** Borough doughnut chart, fare-against-distance scatter plot for up to 300 trips.
+* A table displaying trips, which can be sorted by column and paged at 20 trips per page. There is a View button for each field including the derived average speed, fare per mile and flag for rush hour.
+
+### 4. Backend integration.
+The frontend only uses /api/trips and /api/stats. Three small lookups take place between the two sides of the fence: toApiParams() (date_from becomes start_date), SORT_COLUMNS (sort_fields), fromApiTrip() (PUZone becomes pickup_zone).
+The API returns no total count, so getTrips() requests 21 rows (the default is 20) per page and only calls Next if there is an additional row. getTrips() fetches the data once and reprocesses it as needed. /api/stats does not use filters and fetches the entire table, and only calls Next if there is an additional row.
+
+### 5. Error handling and accessibility
+All requests are made through getJSON(), and refreshDashboard() handles any errors and displays the error message "Could not load data" in the status pill. If there are no trips returned in the search results, the empty result will display "No trips match these filters. The page also has a skip link, labelled inputs, visible focus outline and a native dialog popup and roles.
+
+### 6. Testing
+There was syntax checking of script.js and the entire dashboard was executed on mock data while developing it. This test should be performed against the real database as full data set is not loaded. Planned checks: each filter alone and in combination, invalid input, no results, sorting, first and last page, the popup, backend stopped and mobile layout. Results and screenshots to be added.
+
+### 7. Limitations and improvements
+* All of the cards and the borough chart aren't affected by filtering, as /api/stats doesn't support filters.
+* The scatter plot is not representative of a random sample of the first 300 matching trips.
+* There's no map or hourly chart, as there are no endpoints in the backend for them.
+* With additional time: filter support in /api/stats, hourly and zone endpoints, GeoJSON borough heat map, a total count to aid in pagination.
