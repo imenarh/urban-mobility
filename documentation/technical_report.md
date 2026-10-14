@@ -1,4 +1,4 @@
-## Data Processing and Cleaning (Ganza Gavin):
+## Data Processing and Cleaning 
 
 ### 1. Problem Framing and Dataset Analysis
 
@@ -15,7 +15,23 @@
 
 
 
-## Database Design and Architecture (James D. Kanneh II) 
+## Database Design and Architecture 
+
+### Architecture Diagram
+
+<img width="391" height="422" alt="image" src="https://github.com/user-attachments/assets/554737fe-83e8-423f-9d4b-1e24d0ae0bd6" />
+
+### Stack Choices & Justification
+The backend server was selected to be Python 3.8.10 and Flask, which is lightweight, fast to prototype and easily integrated into other data science libraries such as pandas and numpy.
+
+SQLite: Switched from a cloud-managed PostgreSQL instance (Neon) to local SQLite to avoid hard limits on cloud storage (1GB free tier limits, vs. ~1.6GB cleaned data footprint). SQLite offers local deployment without configuration, high read performance, support for native Python libraries (sqlite3).
+
+For frontend, selected Vanilla JavaScript & Chart.js, to maintain a fast, framework-agnostic dashboard with no complex build steps and for analytical charts to be responsive, Chart.js was chosen.
+
+### Trade-offs made during design(compromises)
+**Local vs. Cloud Database:** Neon PostgreSQL provided enterprise cloud scaling capabilities, but SQLite was selected for the reliability and cost-efficiency of operating within the bounds of the local environment. The downside being that the dashboard loses out on being able to write concurrently to other users, but this is ok for an analytical dashboard that reads a lot.
+
+**Pre-computed vs. Dynamic Aggregations:** The statistics are computed dynamically instead of creating static pre-cached files. This makes it possible to get fresh data for any filter query, but with a minor query latency on large unindexed scans.
 
 ### 1. Schema overview
 The project uses two primary tables: 'zones' and 'trips'. Every row inside the 'zones' table defines a unique taxi zone, while each row in the 'trips' table corresponds to a single taxi ride.
@@ -53,7 +69,7 @@ If given more time, several areas could be improved or addressed:
 
 
 
-## Frontend development (Yai Majak D'Agoot)
+## Frontend development 
 
 ### 1. Overview
 The frontend is a single page dashboard created with HTML, CSS and JavaScript and using Chart.js for the charts. It provides a user with the ability to filter NYC taxi trips and display the results in summary cards, charts and a table, based on data from Member 2's Flask API.
@@ -83,34 +99,79 @@ There was syntax checking of script.js and the entire dashboard was executed on 
 * There's no map or hourly chart, as there are no endpoints in the backend for them.
 * With additional time: filter support in /api/stats, hourly and zone endpoints, GeoJSON borough heat map, a total count to aid in pagination.
 
+## Algorithms, Integration & Testing
 
-## Algorithms, Integration & Testing (Imena Rwigema Herve)
-
-**For the algorithm:** a hash map is used which is hand-written to count trips per drop-off zone. Then a hand-written min-heap of size K = 5 picks the top 5.
+We chose to implement a simple bubble sort algorithm and return the top 5 destinations of the drop-off zones.
 
 **How it works**
 
-* Count in one scan over the trips (O(n) time): O(m) memory (m is the number of different zones/route).
-* Rank with the min-heap (current top K). The root is the smallest of the K.
-  -If a new count is larger than the root, new count replaces the root and shifts down.
-  - Otherwise skip it.
-* To read out the result, pop everything and reverse it and it will go from the biggest to the smallest.
+- To count and group trips by drop-off location (DOLocationID), we use an basic SQL query.
+- use the *bubble sort* algorithm to compare and sort/rank the locations by number of trips ending there.
+- To select the top 5 highest-ranked zones, choose that option -
+- Use the 5 location IDs to get their names from the zones table.
+- Return a JSON object with the 5 locations and # of trips to each location.
 
-**Why this and not a full sort**
+**Why bubble sort?**
 
-- It takes O(m log K) time as opposed to O(m log m).
-- The memory usage for the ranking is O(K).
-- One comparison per item with the root.
+The reason we selected a bubble sort is its simplicity, it was easy to understand, implement, and demonstrate without using Python's built-in sorting functions.
 
-**Honest restrictions on the statements made in the report**
+It is very suitable for our data set as we do not have millions of trips to sort – just a few types of drop-off zones.
 
-The heap won't make it any easier because of counting.
-The gain in speed is small with approximately 265 zones. It is of greater importance for routes (tens of thousands of pairs).
-The heap is simpler, but has a predictable worst case; quickselect is O(m) on average.
-Cache the counts to avoid counting millions of rows for each load.
+**The time and space complexity.**
 
-**Definitions**
+Database aggregation: Counts trips by drop-off location. Processing cost will depend on how many times it is done as well as the query execution plan generated by SQLite.
 
-Top 5" refers to the 5 greatest numbers.
-The k is the number of results to return, not the maximum value.
+Bubble sort: O(m²) time for m number of different drop-off locations.
+
+Space: O(1) additional space as the bubble sort uses the space that is already occupied by the list.
+
+Sorting result: O(10log n) to sort the results.
+
+**Limitations**
+
+The bubble sort is not as efficient as algorithms like merge sort and heap sort for large lists.
+
+The database should sum all the trips prior to the sorting process.
+
+It currently ranks the entire data set and will not change if dashboard filters are applied.
+
+Counting the number of trips may be costly for large data sets. Count numbers may be stored in a cache or precounted for better performance.
+
+**Integration and testing**
+
+The ranking algorithm was integrated in the Flask API with the endpoint `/api/ranking`. The frontend polls the results and shows the top 5 "drop-off zones" on the dashboard.
+
+The endpoint was tested to see if it would return a 5 record HTTP 200. The ranking was also displayed in the frontend.
+
+
+### Insights and Interpretation
+
+<img width="1280" height="719" alt="WhatsApp Image 2026-10-14 at 23 45 33" src="https://github.com/user-attachments/assets/dc7d5ca8-a754-4610-95bf-0203b222330a" />
+
+
+
+### Reflecting and Future Work
+
+### Team Challenges: 
+
+**Technical**
+
+* Installing in a legacy environment with Python 3.8.10 had dependency resolution issues; careful version pinning of compatible versions of libraries (e.g., pandas==2.0.3 and numpy==1.24.3) was necessary to ensure that the pipeline was testable without variation.
+
+* Handling well over 7.5 million records (~1.6GB cleaned CSV) introduced major memory and storage issues when ingesting the data into the database in bulk, so memory-safe chunking strategies were required (50,000 rows at a time) as well as moving to SQLite.
+
+* Coordinating code contributions amongst four distinct pipeline, database, frontend, and algorithmic modules, involved in the system, was achieved through strict Git branching practices, .gitignore file configuration for large files of data, and the resolution of pre-receive hook size violations.
+
+**Real world product improvements & Next steps**
+
+If this application were deployed as a production grade enterprise mobility platform, a couple of architectural changes would be made a priority:
+
+**Cloud Infrastructure Scaling:** Move from local SQLite to a managed cloud Postgres or distributed data warehouse (AWS RDS or Snowflake) to handle enterprise level high concurrency user traffic.
+
+**Implementing Server-Side Pagination & Total Counts:** Enhance the responsiveness of the UI and navigation of dataset with efficient server-side pagination and total record count metadata.
+
+**Geospatial Map Integration:** Using interactive mapping with Leaflet.js or Mapbox and PostGIS or spatial indexes, visualize pickup/drop-off "hotspot" locations by NYC borough.
+
+**Real-Time Stream Processing:** Enhance the monthly batch pipeline model to receive live streaming taxi meter data feeds through Apache Kafka and WebSockets for real-time monitoring of the traffic.
+
 
