@@ -2,7 +2,7 @@
 
 // 1. SETTINGS
 const API_BASE = "http://localhost:5000/api"; // backend address
-const USE_MOCK = true;  // true = fake data, false = real backend
+const USE_MOCK = false;  // true = uses fake data, false = real backend
 const PAGE_SIZE = 20;  // trips per table page
 
 const TEAL = "#0f8b8d";
