@@ -69,7 +69,11 @@ If given more time, several areas could be improved or addressed:
 
 
 
+<<<<<<< HEAD
 ## Frontend development 
+=======
+## Frontend development (Yai Majak D'Agoot)
+>>>>>>> 550682b (final readme)
 
 ### 1. Overview
 The frontend is a single page dashboard created with HTML, CSS and JavaScript and using Chart.js for the charts. It provides a user with the ability to filter NYC taxi trips and display the results in summary cards, charts and a table, based on data from Member 2's Flask API.
@@ -98,6 +102,7 @@ There was syntax checking of script.js and the entire dashboard was executed on 
 * The scatter plot is not representative of a random sample of the first 300 matching trips.
 * There's no map or hourly chart, as there are no endpoints in the backend for them.
 * With additional time: filter support in /api/stats, hourly and zone endpoints, GeoJSON borough heat map, a total count to aid in pagination.
+<<<<<<< HEAD
 
 ## Algorithms, Integration & Testing
 
@@ -175,3 +180,49 @@ If this application were deployed as a production grade enterprise mobility plat
 **Real-Time Stream Processing:** Enhance the monthly batch pipeline model to receive live streaming taxi meter data feeds through Apache Kafka and WebSockets for real-time monitoring of the traffic.
 
 
+=======
+
+## Algorithms, Integration & Testing (Imena Rwigema Herve)
+
+We decided to use a simple **bubble sort** algorithm to rank the drop-off zones and get the *five* highest ranked destinations.
+
+**How it works**
+
+- we use an basic SQL query to count and group trips by drop-off location (DOLocationID)
+- use the *bubble sort* algorithm to compare and sort/rank the locations by number of trips ending there.
+- select the **top 5** highest ranked zones
+- Query the zones table using the 5 location IDs to get their names.
+- Return a JSON object of the 5 locations and the number of trips there
+
+**Why bubble sort?**
+
+We chose bubble sort because it is simple to understand, implement, and demonstrate without relying on Python's built-in sorting functions.
+
+It works well for our dataset because we are sorting a relatively small number of distinct drop-off zones rather than millions of individual trips.
+
+**Time and space complexity**
+
+Database aggregation: Counts trips by drop-off location. The processing cost depends on the number of trips and SQLite's query execution plan.
+
+Bubble sort: O(m²) time, where m is the number of distinct drop-off locations.
+
+Sorting space: O(1) additional space because bubble sort modifies the existing list.
+
+Result selection: O(5) to retrieve the first five locations.
+
+**Limitations**
+
+Bubble sort is inefficient for large datasets compared with algorithms such as merge sort or heap sort.
+
+The database must aggregate the trips before sorting begins.
+
+The ranking currently uses the entire dataset and does not change when dashboard filters are applied.
+
+Repeatedly calculating trip counts can be expensive for large datasets. Caching or precomputing the counts could improve performance.
+
+**Integration and testing**
+
+We integrated the ranking algorithm into the Flask API through `/api/ranking`. The frontend fetches the results and displays the five busiest drop-off zones on the dashboard.
+
+The endpoint was checked to confirm that it returns HTTP 200 with five records. The ranking was also displayed in the frontend.
+>>>>>>> 550682b (final readme)

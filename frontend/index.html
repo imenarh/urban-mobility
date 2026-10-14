@@ -1,20 +1,11 @@
 <!DOCTYPE html>
-<!-- 
-Urban Mobility Data Explorer
-A dashboard for exploring taxi trip patterns.
-This html file only defines the structure of the page. Other files used:
-1. css/style.css - visual styles
-2. js/script.js - all the JavaScript (data loading, filters, table, charts, map)
--->
 
 <html lang ="en">
 <head>
     <meta charset="UTF-8">
-    <!-- This scales the page to the device width -->    
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title> Urban Mobility Data Explorer</title>
 
-    <!-- These are fonts used for the Headings and body text -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Public+Sans:wght@400&display=swap" rel="stylesheet">
@@ -23,29 +14,24 @@ This html file only defines the structure of the page. Other files used:
      <link rel="stylesheet" href="css/style.css">
 </head> 
 <body>
-    <!-- This is an accessibility feature that allows users to jump straight to the table-->
     <a class="skip-link" href="#trips-section">Skip to trip Table</a>
 
     <!-- Page Header -->
-    <!-- Title, one line description, and status message -->
     <header class="site-header">
         <div>
             <h1> Urban Mobility Data Explorer </h1>
             <p class="tagline"> Where New York's Cabs go, When they do and its cost. </p>
         </div>
-    <!-- Javascript will update this message ("Loading data...", "Showing 12,000 trips", or an error).
-        role="status" makes screen readers announce the change -->
     <p id="data-status" class="data-status" role="status" aria-live="polite">Loading data...</p>
     </header>   
 
-    <!-- Two-column layout: filters on the left, content on the right -->
+    <!-- We have the sidebar on the left, and content on the right -->
     <div class="layout">
      
     <aside class="filters" aria-label="Filters">
         <form id="filter-form" autocomplete="off">
             <h2>Filter trips</h2>
                                              
-            <!-- Time filter to find date range -->
             <fieldset>
             <legend>Time</legend>
             <label for="date-from">From date</label>
@@ -54,7 +40,6 @@ This html file only defines the structure of the page. Other files used:
             <input type="date" id="date-to" name="date_to">
         </fieldset> 
 
-        <!-- Location filter with options filled in by JS -->
         <fieldset>
             <legend>Location</legend>
             <label for="borough">Borough (pickup or drop-off)</label>
@@ -62,8 +47,7 @@ This html file only defines the structure of the page. Other files used:
                 <option value="">All boroughs</option>
             </select>
         </fieldset>
-                                                 
-        <!-- This part is for the trip distance and fare amount. Both values are numerical -->
+
         <fieldset>
             <legend>Distance and fare</legend>
             <label for="dist-min">Distance (miles)</label>
@@ -77,7 +61,7 @@ This html file only defines the structure of the page. Other files used:
             <input type="number" id="fare-max" name="fare_max" min="0" step="0.5" placeholder="Max">
         </div>
     </fieldset>
-                         
+
     <!-- only appears when JS finds invalid input (e.g. min greater than max) -->
     <p id="filter-error" class="form-error" role="alert" hidden></p>
                                      
@@ -87,8 +71,9 @@ This html file only defines the structure of the page. Other files used:
                 <button type="reset" id="reset-btn" class="btn-secondary">Clear</button>
             </div>
         </form>
+
         <section class="ranking" aria-labelledby="ranking-title">
-            <h2 id="ranking-title">Top 5 drop-off Zones</h2>
+            <h2 id="ranking-title">5 Most Popular Zones</h2>
             <ol id="ranking-list">
                 <li>Loading rankings....</li>
             </ol>
