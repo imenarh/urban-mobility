@@ -19,9 +19,6 @@ This html file only defines the structure of the page. Other files used:
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Public+Sans:wght@400&display=swap" rel="stylesheet">
 
-    <!-- Leaflet: styles for the zone map -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
-    
     <!-- This is the main stylesheet for this project -->
      <link rel="stylesheet" href="css/style.css">
 </head> 
@@ -48,30 +45,21 @@ This html file only defines the structure of the page. Other files used:
         <form id="filter-form" autocomplete="off">
             <h2>Filter trips</h2>
                                              
-            <!-- Time filter to find date range and pickup hour range -->
+            <!-- Time filter to find date range -->
             <fieldset>
             <legend>Time</legend>
             <label for="date-from">From date</label>
             <input type="date" id="date-from" name="date_from">
             <label for="date-to">To date</label>
             <input type="date" id="date-to" name="date_to">
-            <label for="hour-from">Pickup hour (0–23)</label>
-            <div class="row">
-                <input type="number" id="hour-from" name="hour_from" min="0" max="23" placeholder="From">
-                <input type="number" id="hour-to" name="hour_to" min="0" max="23" placeholder="To">
-            </div>
         </fieldset> 
 
-        <!-- Location filters to select options filled in by JS from the zone lookup data -->
+        <!-- Location filter with options filled in by JS -->
         <fieldset>
             <legend>Location</legend>
-            <label for="borough">Pickup borough</label>
+            <label for="borough">Borough (pickup or drop-off)</label>
             <select id="borough" name="borough">
                 <option value="">All boroughs</option>
-            </select>
-            <label for="zone">Pickup zone</label>
-            <select id="zone" name="zone">
-                <option value="">All zones</option>
             </select>
         </fieldset>
                                                  
@@ -99,88 +87,55 @@ This html file only defines the structure of the page. Other files used:
                 <button type="reset" id="reset-btn" class="btn-secondary">Clear</button>
             </div>
         </form>
+        <section class="ranking" aria-labelledby="ranking-title">
+            <h2 id="ranking-title">Top 5 drop-off Zones</h2>
+            <ol id="ranking-list">
+                <li>Loading rankings....</li>
+            </ol>
+        </section>
     </aside>
                                          
     <!-- Main table-->
     <main>
-                                                     
-        <!--Summary 
-            Headline numbers for whatever trips match the current filters.
-            The "–" shows up until the API responds. -->
         <section aria-labelledby="summary-title">
-            <!-- Heading kept for screen readers only (visually-hidden class in the CSS) -->
-            <h2 id="summary-title" class="visually-hidden">Summary of matching trips</h2> 
+            <p class="caption">Overall statistics for the whole dataset. They do not change with the filters.</p> 
             <div class="summary-grid" id="summary-cards">
                 <article class="stat"><span class="stat-label">Trips</span><span class="stat-value" id="stat-trips">–</span></article>
                 <article class="stat"><span class="stat-label">Average fare</span><span class="stat-value" id="stat-fare">–</span></article>
                 <article class="stat"><span class="stat-label">Average distance</span><span class="stat-value" id="stat-distance">–</span></article>
                 <article class="stat"><span class="stat-label">Average duration</span><span class="stat-value" id="stat-duration">–</span></article>
-                <!-- Speed and tip come from derived features (Member 1) -->
+                <!-- Speed comes from a derived feature (Member 1) -->
                 <article class="stat"><span class="stat-label">Average speed</span><span class="stat-value" id="stat-speed">–</span></article>
-                <article class="stat"><span class="stat-label">Average tip</span><span class="stat-value" id="stat-tip">–</span></article>
             </div>
         </section>
-                                                                                                 
-        <!-- Charts:
-            Each chart is a <figure> with a title and a one-line explanation of
-            what it shows. The <canvas> elements are where Chart.js draws.
-            The aria-label gives screen readers a text description. -->
+                                                                                  
         <section class="charts" aria-labelledby="charts-title">
             <h2 id="charts-title">Patterns</h2>
                                                                                                                                                      
-            <!-- Wide chart: demand and speed across the 24 hours of the day -->
-            <figure class="chart-card wide">
-                <figcaption>
-                    <h3>Trips and average speed by hour of day</h3>
-                    <p class="caption">Shows the daily rhythm of demand and where congestion slows cabs down.</p>
-                </figcaption>
-                <canvas id="chart-hourly" role="img" aria-label="Trips and average speed by pickup hour"></canvas>
-            </figure>
-                                                                                                                                                                             
             <!-- Compares the five boroughs -->
             <figure class="chart-card">
                 <figcaption>
                     <h3>Trips by pickup borough</h3>
-                    <p class="caption">Share of rides starting in each borough.</p>
+                    <p class="caption">Overall share of rides starting in each borough (not filtered).</p>
                 </figcaption>
                 <canvas id="chart-borough" role="img" aria-label="Trips by pickup borough"></canvas>
             </figure>
                                                                                                                                                                                                      
-            <!-- Relationship between distance and fare; a sample keeps it fast -->
+            <!-- Relationship between distance and fare-->
             <figure class="chart-card">
                 <figcaption>
                     <h3>Fare against distance</h3>
-                    <p class="caption">Each dot is a sampled trip. Outliers show unusual fares for the distance.</p>
+                    <p class="caption">A limited selection of the trips matching the filters. Each dot is one trip.</p>
                 </figcaption>
                 <canvas id="chart-scatter" role="img" aria-label="Fare against distance scatter plot"></canvas>
             </figure>
-                                                                                                                                                                                                                             
-            <!-- Ranked list. JS fills in the items.
-                This could use Member 4's custom ranking algorithm. -->
-            <figure class="chart-card">
-                <figcaption>
-                    <h3>Busiest pickup zones</h3>
-                    <p class="caption">Top zones ranked by number of trips.</p>
-                </figcaption>
-                <ol id="top-zones" class="ranking"></ol>
-            </figure>
-        </section>
-                                                                                                                                                                                                                                                                 
-        <!-- Map 
-            Leaflet draws the taxi zone polygons in this empty div and shades them by pickup count. -->
-        <section class="map-section" aria-labelledby="map-title">
-            <h2 id="map-title">Pickup demand by zone</h2>
-            <p class="caption">Darker zones have more pickups. Select a zone to filter the dashboard to it.</p>
-            <div id="zone-map" class="zone-map" role="application" aria-label="Map of taxi zones"></div>
         </section>
                                                                                                                                                                                                                                                                                                  
-        <!--  Trips table 
-            The detailed records. id="trips-section" is the target of the skip link. -->
+        <!--  Trips table -->
         <section id="trips-section" aria-labelledby="trips-title">
             <div class="table-head">
                 <h2 id="trips-title">Trips</h2>
-                                                                                                                                                                                                                                                                                                                                             
-                <!-- Dropdown sorting. The option values are the column names the API should accept for sorting (confirm with Member 2). -->
+
                 <div class="sort-controls">
                     <label for="sort-by">Sort by</label>
                     <select id="sort-by">
@@ -188,7 +143,6 @@ This html file only defines the structure of the page. Other files used:
                         <option value="trip_distance">Distance</option>
                         <option value="fare_amount">Fare</option>
                         <option value="trip_duration_min">Duration</option>
-                        <option value="avg_speed_mph">Speed</option>
                     </select>
                     <select id="sort-order" aria-label="Sort order">
                         <option value="desc">High to low</option>
@@ -196,8 +150,7 @@ This html file only defines the structure of the page. Other files used:
                     </select>
                 </div>
             </div>
-                                                                                                                                                                                                                                                                                                                                                                                                 
-            <!-- table-wrap lets the table scroll sideways on small screens -->
+
             <div class="table-wrap">
                 <table id="trips-table">
                     <thead>
@@ -213,14 +166,12 @@ This html file only defines the structure of the page. Other files used:
                             <th scope="col"><span class="visually-hidden">Details</span></th>
                         </tr>
                     </thead>
-                    <!-- JS replaces this placeholder row with the real trip rows -->
                     <tbody id="trips-body">
                         <tr><td colspan="7" class="empty">Loading trips…</td></tr>
                     </tbody>
                 </table>
             </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-            <!-- Page-by-page navigation so we never load the whole dataset at once -->
+
             <nav class="pagination" aria-label="Trip pages">
                 <button type="button" id="prev-page" class="btn-secondary">Previous</button>
                 <span id="page-info">Page 1</span>
@@ -229,10 +180,7 @@ This html file only defines the structure of the page. Other files used:
         </section>
     </main>
 </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-<!--TRIP DETAIL VIEW 
-        A native <dialog> popup. JS fills the <dl> with every field of the trip that was clicked, then calls showModal(). The form with
-        method="dialog" closes it without any extra JS. -->
+
 <dialog id="trip-dialog" aria-labelledby="trip-dialog-title">
     <form method="dialog" class="dialog-head">
         <h2 id="trip-dialog-title">Trip details</h2>
@@ -248,7 +196,6 @@ This html file only defines the structure of the page. Other files used:
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
     <!-- SCRIPTS
         Placed at the end so the HTML exists before the JS runs. -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="js/script.js"></script>
 </body>

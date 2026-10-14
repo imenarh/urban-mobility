@@ -1,4 +1,9 @@
 venv/
 .venv/
-backend/data/
 __pycache__/
+
+backend/data/raw/*
+!backend/data/raw/.gitkeep
+
+backend/data/processed/*    
+!backend/data/processed/.gitkeep
