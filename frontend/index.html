@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <!-- 
 Urban Mobility Data Explorer
-A dashboard for exploring NYC taxi trip patterns.
+A dashboard for exploring taxi trip patterns.
 This html file only defines the structure of the page. Other files used:
 1. css/style.css - visual styles
 2. js/script.js - all the JavaScript (data loading, filters, table, charts, map)
@@ -14,7 +14,7 @@ This html file only defines the structure of the page. Other files used:
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title> Urban Mobility Data Explorer</title>
 
-    <!-- These are the fonts used for the Headings and body text -->
+    <!-- These are fonts used for the Headings and body text -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Public+Sans:wght@400&display=swap" rel="stylesheet">
@@ -75,7 +75,7 @@ This html file only defines the structure of the page. Other files used:
             </select>
         </fieldset>
                                                  
-        <!-- This part is for the trip distance and fare amount both are numerical -->
+        <!-- This part is for the trip distance and fare amount. Both values are numerical -->
         <fieldset>
             <legend>Distance and fare</legend>
             <label for="dist-min">Distance (miles)</label>
@@ -121,7 +121,7 @@ This html file only defines the structure of the page. Other files used:
             </div>
         </section>
                                                                                                  
-        <!-- ---------- Charts ----------
+        <!-- Charts:
             Each chart is a <figure> with a title and a one-line explanation of
             what it shows. The <canvas> elements are where Chart.js draws.
             The aria-label gives screen readers a text description. -->
@@ -155,7 +155,7 @@ This html file only defines the structure of the page. Other files used:
                 <canvas id="chart-scatter" role="img" aria-label="Fare against distance scatter plot"></canvas>
             </figure>
                                                                                                                                                                                                                              
-            <!-- Ranked list (an <ol> because order matters). JS fills in the items.
+            <!-- Ranked list. JS fills in the items.
                 This could use Member 4's custom ranking algorithm. -->
             <figure class="chart-card">
                 <figcaption>
@@ -167,22 +167,20 @@ This html file only defines the structure of the page. Other files used:
         </section>
                                                                                                                                                                                                                                                                  
         <!-- Map 
-            Leaflet draws the taxi zone polygons (from the GeoJSON file) in
-            this empty div and shades them by pickup count. -->
+            Leaflet draws the taxi zone polygons in this empty div and shades them by pickup count. -->
         <section class="map-section" aria-labelledby="map-title">
             <h2 id="map-title">Pickup demand by zone</h2>
             <p class="caption">Darker zones have more pickups. Select a zone to filter the dashboard to it.</p>
             <div id="zone-map" class="zone-map" role="application" aria-label="Map of taxi zones"></div>
         </section>
                                                                                                                                                                                                                                                                                                  
-        <!-- ---------- Trips table ----------
+        <!--  Trips table 
             The detailed records. id="trips-section" is the target of the skip link. -->
         <section id="trips-section" aria-labelledby="trips-title">
             <div class="table-head">
                 <h2 id="trips-title">Trips</h2>
                                                                                                                                                                                                                                                                                                                                              
-                <!-- Dropdown sorting. The option values are the column names the API
-                    should accept for sorting (confirm with Member 2). -->
+                <!-- Dropdown sorting. The option values are the column names the API should accept for sorting (confirm with Member 2). -->
                 <div class="sort-controls">
                     <label for="sort-by">Sort by</label>
                     <select id="sort-by">
@@ -232,9 +230,8 @@ This html file only defines the structure of the page. Other files used:
     </main>
 </div>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
-<!-- ================= TRIP DETAIL VIEW =================
-        A native <dialog> popup. JS fills the <dl> with every field of the
-        trip that was clicked, then calls showModal(). The form with
+<!--TRIP DETAIL VIEW 
+        A native <dialog> popup. JS fills the <dl> with every field of the trip that was clicked, then calls showModal(). The form with
         method="dialog" closes it without any extra JS. -->
 <dialog id="trip-dialog" aria-labelledby="trip-dialog-title">
     <form method="dialog" class="dialog-head">
@@ -244,15 +241,13 @@ This html file only defines the structure of the page. Other files used:
     <dl id="trip-detail" class="detail-list"></dl>
 </dialog>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
-<!-- ================= FOOTER ================= -->
+<!-- FOOTER  -->
 <footer class="site-footer">
     <p>Data: NYC Taxi &amp; Limousine Commission yellow cab trip records.</p>
 </footer>
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
-    <!-- ================= SCRIPTS =================
-        Placed at the end so the HTML exists before the JS runs.
-        Order matters: libraries first, then our files, with app.js last
-        because it uses the functions defined in api.js and charts.js. -->
+    <!-- SCRIPTS
+        Placed at the end so the HTML exists before the JS runs. -->
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <script src="js/script.js"></script>
