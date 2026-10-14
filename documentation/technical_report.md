@@ -52,7 +52,7 @@ If given more time, several areas could be improved or addressed:
 
 
 
-## Frontend development(Yai Majak D'Agoot)
+## Frontend development (Yai Majak D'Agoot)
 
 ### 1. Overview
 The frontend is a single page dashboard created with HTML, CSS and JavaScript and using Chart.js for the charts. It provides a user with the ability to filter NYC taxi trips and display the results in summary cards, charts and a table, based on data from Member 2's Flask API.
@@ -81,3 +81,35 @@ There was syntax checking of script.js and the entire dashboard was executed on 
 * The scatter plot is not representative of a random sample of the first 300 matching trips.
 * There's no map or hourly chart, as there are no endpoints in the backend for them.
 * With additional time: filter support in /api/stats, hourly and zone endpoints, GeoJSON borough heat map, a total count to aid in pagination.
+
+
+## Algorithms, Integration & Testing (Imena Rwigema Herve)
+
+**For the algorithm:** a hash map is used which is hand-written to count trips per drop-off zone. Then a hand-written min-heap of size K = 5 picks the top 5.
+
+**How it works**
+
+* Count in one scan over the trips (O(n) time): O(m) memory (m is the number of different zones/route).
+* Rank with the min-heap (current top K). The root is the smallest of the K.
+  -If a new count is larger than the root, new count replaces the root and shifts down.
+  - Otherwise skip it.
+* To read out the result, pop everything and reverse it and it will go from the biggest to the smallest.
+
+**Why this and not a full sort**
+
+- It takes O(m log K) time as opposed to O(m log m).
+- The memory usage for the ranking is O(K).
+- One comparison per item with the root.
+
+**Honest restrictions on the statements made in the report**
+
+The heap won't make it any easier because of counting.
+The gain in speed is small with approximately 265 zones. It is of greater importance for routes (tens of thousands of pairs).
+The heap is simpler, but has a predictable worst case; quickselect is O(m) on average.
+Cache the counts to avoid counting millions of rows for each load.
+
+**Definitions**
+
+Top 5" refers to the 5 greatest numbers.
+The k is the number of results to return, not the maximum value.
+
