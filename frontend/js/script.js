@@ -1,9 +1,9 @@
-// ===== Urban Mobility Data Explorer: script.js =====
+// Urban Mobility Data Explorer: script.js 
 
-// ===== 1. SETTINGS =====
+// 1. SETTINGS
 const API_BASE = "http://localhost:5000/api"; // backend address
-const USE_MOCK = true;                        // true = fake data, false = real backend
-const PAGE_SIZE = 20;                         // trips per table page
+const USE_MOCK = true;  // true = fake data, false = real backend
+const PAGE_SIZE = 20;  // trips per table page
 
 const TEAL = "#0f8b8d";
 const YELLOW = "#f2a900";
@@ -19,7 +19,7 @@ const state = {
 // Shortcut for document.getElementById
 const $ = (id) => document.getElementById(id);
 
-// ===== 2. FAKE DATA (only used while USE_MOCK is true) =====
+// 2. FAKE DATA (only used while USE_MOCK is true)
 const BOROUGHS = ["Manhattan", "Brooklyn", "Queens", "Bronx", "Staten Island"];
 
 const ZONES = [
@@ -93,7 +93,7 @@ function average(trips, field) {
   return sum / trips.length;
 }
 
-// ===== 3. GETTING DATA =====
+// 3. GETTING DATA
 // Each function returns fake data or asks the backend, depending on USE_MOCK.
 
 // Sends a request to the backend and returns the answer
@@ -240,7 +240,7 @@ async function getZoneStats() {
   }));
 }
 
-// ===== 4. FILTERS =====
+// 4. FILTERS
 
 // Adds the borough and zone options to the dropdowns
 async function setupDropdowns() {
@@ -300,7 +300,7 @@ function clearFilters() {
   refreshDashboard();
 }
 
-// ===== 5. SHOWING NUMBERS AND TEXT =====
+// 5. SHOWING NUMBERS AND TEXT
 
 function money(value) {
   return "$" + Number(value).toFixed(2);
@@ -387,7 +387,7 @@ function showDetails(trip) {
   $("trip-dialog").showModal();
 }
 
-// ===== 6. CHARTS AND RANKING =====
+// 6. CHARTS AND RANKING
 const charts = {}; // remembers each chart so it can be replaced
 
 // Draws a chart, removing the old one first
@@ -459,7 +459,7 @@ function showTopZones(zones) {
   }
 }
 
-// ===== 7. MAP =====
+// 7. MAP 
 let map;
 let circles; // the group of circles on the map
 
@@ -491,7 +491,7 @@ function showMap(zones) {
   }
 }
 
-// ===== 8. UPDATING EVERYTHING =====
+// 8. UPDATING EVERYTHING
 // Gets fresh data and redraws the whole dashboard
 async function refreshDashboard() {
   $("data-status").textContent = "Loading data...";
@@ -523,7 +523,7 @@ function updateSort() {
   refreshDashboard();
 }
 
-// ===== 9. START =====
+// 9. START
 $("filter-form").addEventListener("submit", applyFilters);
 $("filter-form").addEventListener("reset", clearFilters);
 $("sort-by").addEventListener("change", updateSort);
